@@ -136,24 +136,43 @@
 
 - (void)tapViewWithAccessibilityLabel:(NSString *)label
 {
-    [self tapViewWithAccessibilityLabel:label value:nil traits:UIAccessibilityTraitNone];
+    [self tapViewWithAccessibilityLabel:label andCheckFirstResponder:YES];
+}
+
+- (void)tapViewWithAccessibilityLabel:(NSString *)label andCheckFirstResponder:(BOOL)checkFirstResponder
+{
+    [self tapViewWithAccessibilityLabel:label value:nil traits:UIAccessibilityTraitNone andCheckFirstResponder:checkFirstResponder];
 }
 
 - (void)tapViewWithAccessibilityLabel:(NSString *)label traits:(UIAccessibilityTraits)traits
 {
-    [self tapViewWithAccessibilityLabel:label value:nil traits:traits];
+    [self tapViewWithAccessibilityLabel:label traits:traits andCheckFirstResponder:YES];
+}
+
+- (void)tapViewWithAccessibilityLabel:(NSString *)label traits:(UIAccessibilityTraits)traits andCheckFirstResponder:(BOOL)checkFirstResponder
+{
+    [self tapViewWithAccessibilityLabel:label value:nil traits:traits andCheckFirstResponder:checkFirstResponder];
 }
 
 - (void)tapViewWithAccessibilityLabel:(NSString *)label value:(NSString *)value traits:(UIAccessibilityTraits)traits
+{
+    [self tapViewWithAccessibilityLabel:label value:value traits:traits andCheckFirstResponder:YES];
+}
+- (void)tapViewWithAccessibilityLabel:(NSString *)label value:(NSString *)value traits:(UIAccessibilityTraits)traits andCheckFirstResponder:(BOOL)checkFirstResponder
 {
     UIView *view = nil;
     UIAccessibilityElement *element = nil;
     
     [self waitForAccessibilityElement:&element view:&view withLabel:label value:value traits:traits tappable:YES];
-    [self tapAccessibilityElement:element inView:view];
+    [self tapAccessibilityElement:element inView:view andCheckFirstResponder:checkFirstResponder];
 }
 
 - (void)tapAccessibilityElement:(UIAccessibilityElement *)element inView:(UIView *)view
+{
+    [self tapAccessibilityElement:element inView:view andCheckFirstResponder:YES];
+}
+
+- (void)tapAccessibilityElement:(UIAccessibilityElement *)element inView:(UIView *)view andCheckFirstResponder:(BOOL)checkFirstResponder
 {
     [self runBlock:^KIFTestStepResult(NSError **error) {
         
@@ -172,9 +191,11 @@
         // This is mostly redundant of the test in _accessibilityElementWithLabel:
         KIFTestWaitCondition(!isnan(tappablePointInElement.x), error, @"View is not tappable");
         [view tapAtPoint:tappablePointInElement];
-        
-        KIFTestCondition(![view canBecomeFirstResponder] || [view isDescendantOfFirstResponder], error, @"Failed to make the view into the first responder");
-        
+
+        if ( checkFirstResponder ) {
+            KIFTestCondition(![view canBecomeFirstResponder] || [view isDescendantOfFirstResponder], error, @"Failed to make the view into the first responder");
+        }
+
         return KIFTestStepResultSuccess;
     }];
     

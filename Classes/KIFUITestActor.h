@@ -150,7 +150,7 @@ static inline KIFDisplacement KIFDisplacementForSwipingInDirection(KIFSwipeDirec
  @param label The accessibility label of the element to tap.
  */
 - (void)tapViewWithAccessibilityLabel:(NSString *)label;
-
+- (void)tapViewWithAccessibilityLabel:(NSString *)label andCheckFirstResponder:(BOOL)checkFirstResponder;
 /*!
  @abstract Taps a particular view in the view hierarchy.
  @discussion The view or accessibility element with the given label is searched for in the view hierarchy. If the element isn't found or isn't currently tappable, then the step will attempt to wait until it is. Once the view is present and tappable, a tap event is simulated in the center of the view or element.
@@ -158,6 +158,7 @@ static inline KIFDisplacement KIFDisplacementForSwipingInDirection(KIFSwipeDirec
  @param traits The accessibility traits of the element to tap. Elements that do not include at least these traits are ignored.
  */
 - (void)tapViewWithAccessibilityLabel:(NSString *)label traits:(UIAccessibilityTraits)traits;
+- (void)tapViewWithAccessibilityLabel:(NSString *)label traits:(UIAccessibilityTraits)traits andCheckFirstResponder:(BOOL)checkFirstResponder;
 
 /*!
  @abstract Taps a particular view in the view hierarchy.
@@ -169,6 +170,7 @@ static inline KIFDisplacement KIFDisplacementForSwipingInDirection(KIFSwipeDirec
  @param traits The accessibility traits of the element to tap. Elements that do not include at least these traits are ignored.
  */
 - (void)tapViewWithAccessibilityLabel:(NSString *)label value:(NSString *)value traits:(UIAccessibilityTraits)traits;
+- (void)tapViewWithAccessibilityLabel:(NSString *)label value:(NSString *)value traits:(UIAccessibilityTraits)traits andCheckFirstResponder:(BOOL)checkFirstResponder;
 
 /*!
  @abstract Taps a particular view in the view heirarchy.
@@ -177,7 +179,7 @@ static inline KIFDisplacement KIFDisplacementForSwipingInDirection(KIFSwipeDirec
  @param view The view containing the accessibility element.
  */
 - (void)tapAccessibilityElement:(UIAccessibilityElement *)element inView:(UIView *)view;
-
+- (void)tapAccessibilityElement:(UIAccessibilityElement *)element inView:(UIView *)view andCheckFirstResponder:(BOOL)checkFirstResponder;
 /*!
  @abstract Taps the screen at a particular point.
  @discussion Taps the screen at a specific point. In general you should use the factory steps that tap a view based on its accessibility label, but there are situations where it's not possible to access a view using accessibility mechanisms. This step is more lenient than the steps that use the accessibility label, and does not wait for any particular view to appear, or validate that the tapped view is enabled or has interaction enabled. Because this step doesn't doesn't validate that a view is present before tapping it, it's good practice to precede this step where possible with a -waitForViewWithAccessibilityLabel: with the label for another view that should appear on the same screen.
